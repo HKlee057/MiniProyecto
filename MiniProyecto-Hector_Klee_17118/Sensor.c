@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------------
 
 #include "Sensor.h"                         // Libreria creada para control de sensor de interferencia/ seguidor de linea
+#include "UART.h"                           // Libreria creada para UART
 /* ------------------------------     Variables        ---------------------------- */
 uint8_t sens_data = 1;                      // Variable de control de sensor
 uint8_t action;                             // Varaible de verificación de detección
@@ -27,6 +28,9 @@ sens_init(void)
     GPIOPinTypeGPIOInput(GPIO_PORTE_BASE, GPIO_PIN_1);
     GPIOPadConfigSet(GPIO_PORTE_BASE, GPIO_PIN_1, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+
+    // Iniciliazacion de UART
+    uart_init();
 }
 
 /* ----------------      Cambio de color en LED al haber deteccion     --------------------- */
@@ -48,12 +52,16 @@ colors(void)
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0x00);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);
+
+                UARTprintf("Interferencia detectada: ON \n");
+
             }  else if (count == 2)
             {
                 // Negro
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0x00);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0x00);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0x00);
+                UARTprintf("Sin interferencia: OFF \n");
                 count = 0;
             }
             action = 0;

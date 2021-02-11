@@ -14,36 +14,42 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib
 C_SRCS += \
 ../Sensor.c \
 ../Servo.c \
+../UART.c \
 ../main.c \
 ../tm4c123gh6pm_startup_ccs.c 
 
 C_DEPS += \
 ./Sensor.d \
 ./Servo.d \
+./UART.d \
 ./main.d \
 ./tm4c123gh6pm_startup_ccs.d 
 
 OBJS += \
 ./Sensor.obj \
 ./Servo.obj \
+./UART.obj \
 ./main.obj \
 ./tm4c123gh6pm_startup_ccs.obj 
 
 OBJS__QUOTED += \
 "Sensor.obj" \
 "Servo.obj" \
+"UART.obj" \
 "main.obj" \
 "tm4c123gh6pm_startup_ccs.obj" 
 
 C_DEPS__QUOTED += \
 "Sensor.d" \
 "Servo.d" \
+"UART.d" \
 "main.d" \
 "tm4c123gh6pm_startup_ccs.d" 
 
 C_SRCS__QUOTED += \
 "../Sensor.c" \
 "../Servo.c" \
+"../UART.c" \
 "../main.c" \
 "../tm4c123gh6pm_startup_ccs.c" 
 

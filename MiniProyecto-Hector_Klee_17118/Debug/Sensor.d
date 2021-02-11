@@ -27,6 +27,10 @@ Sensor.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 Sensor.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/rom.h
 Sensor.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_ints.h
 Sensor.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/timer.h
+Sensor.obj: ../UART.h
+Sensor.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h
+Sensor.obj: ../uartStdio/uartstdio.h
+Sensor.obj: C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdarg.h
 
 ../Sensor.c: 
 ../Sensor.h: 
@@ -55,3 +59,7 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/rom.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_ints.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/timer.h: 
+../UART.h: 
+C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h: 
+../uartStdio/uartstdio.h: 
+C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdarg.h: 

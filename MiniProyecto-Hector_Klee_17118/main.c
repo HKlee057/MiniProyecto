@@ -33,6 +33,7 @@
 
 #include "Servo.h"                          // Libreria creada para control de servo en PWM1, Gen0
 #include "Sensor.h"                         // Libreria creada para control de sensor de interferencia/ seguidor de linea
+#include "UART.h"                           // Libreria creada para UART
 /* -----------------------              Main            --------------------- */
 int main(void)
 {

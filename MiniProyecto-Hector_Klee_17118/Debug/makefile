@@ -12,8 +12,10 @@ GEN_CMDS__FLAG :=
 ORDERED_OBJS += \
 "./Sensor.obj" \
 "./Servo.obj" \
+"./UART.obj" \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
+"./uartStdio/uartstdio.obj" \
 "C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib" \
 "../tm4c123gh6pm.cmd" \
 $(GEN_CMDS__FLAG) \
@@ -27,7 +29,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include uartStdio/subdir_vars.mk
 -include subdir_rules.mk
+-include uartStdio/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -158,8 +162,8 @@ MiniProyecto-Hector_Klee_17118.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Sensor.obj" "Servo.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" 
-	-$(RM) "Sensor.d" "Servo.d" "main.d" "tm4c123gh6pm_startup_ccs.d" 
+	-$(RM) "Sensor.obj" "Servo.obj" "UART.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" "uartStdio\uartstdio.obj" 
+	-$(RM) "Sensor.d" "Servo.d" "UART.d" "main.d" "tm4c123gh6pm_startup_ccs.d" "uartStdio\uartstdio.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
