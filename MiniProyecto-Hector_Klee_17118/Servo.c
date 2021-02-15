@@ -6,14 +6,58 @@
 //-----------------------------------------------------------------------------
 
 #include "Servo.h"                          // Libreria creada para control de servo en PWM1, Gen0
+#include "UART.h"                           // Libreria creada para UART
 /* -----------------------------     Definiciones        ---------------------------- */
-#define PWM_FREQUENCY 50                    // Define macro para la frecuencia del PWM en Hz
+#define Period  320000 //(16000000/50) 50Hz
+#define SERVO_STEPS         180     // Maximum amount of steps in degrees (180 is common)
+#define SERVO_MIN           11500//9500     // The minimum duty cycle for this servo
+#define SERVO_MAX           40000//35100    // The maximum duty cycle
+
+unsigned int servo_lut[SERVO_STEPS+1];
 
 /* ------------------------------     Variables        ---------------------------- */
-uint32_t ui32Period;                        // Variable para el periodo de PWM
-volatile uint8_t ui8Adjust = 75;            // Variable el Duty Cycle del Servo
+volatile uint32_t ui8Adjust;            // Variable el angulo del Servo
 
 /* -------------------      Handler de Interrupción en Puerto F     --------------------- */
+void InitServo(void) //PC5
+{
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
+    GPIOPinConfigure(GPIO_PC5_WT0CCP1);
+    GPIOPinTypeTimer(GPIO_PORTC_BASE, GPIO_PIN_5);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_WTIMER0);
+    TimerConfigure(WTIMER0_BASE, TIMER_CFG_SPLIT_PAIR|TIMER_CFG_B_PWM);
+    TimerLoadSet(WTIMER0_BASE, TIMER_B, (Period-1));
+    TimerMatchSet(WTIMER0_BASE, TIMER_B, (Period-9600));
+
+    TimerMatchSet(WTIMER0_BASE, TIMER_B, 1);
+    TimerEnable(WTIMER0_BASE, TIMER_B);
+}
+
+void ConfigureServo(void)
+{
+    unsigned int servo_stepval, servo_stepnow;
+    unsigned int i;
+
+    servo_stepval   = ( (SERVO_MAX - SERVO_MIN) / SERVO_STEPS );
+    servo_stepnow   = SERVO_MIN;
+
+    for (i = 0; i < (SERVO_STEPS+1); i++)
+    {
+        servo_lut[i] = (Period-servo_stepnow);
+        servo_stepnow += servo_stepval;
+    }
+}
+
+void SetServoPosition(uint32_t position)
+{
+    TimerMatchSet(WTIMER0_BASE, TIMER_B, position);
+}
+
+void SetServoAngle(uint32_t angle)
+{
+    SetServoPosition(servo_lut[angle]);
+}
+
 void
 portF_int_handler(void)
 {
@@ -24,19 +68,19 @@ portF_int_handler(void)
     if(GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4 | GPIO_PIN_0)== GPIO_PIN_0){
         //ui8Adjust++;
         ui8Adjust = ui8Adjust + 3;
-        if (ui8Adjust > 125){
-            ui8Adjust = 125;
+        if (ui8Adjust > 180){
+            ui8Adjust = 180;
         }
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ui8Adjust * ui32Period / 1000);
+        SetServoAngle(ui8Adjust);
     }
     // If SW2 se presiona, disminuir a la variable de control de Duty Cycle
     if(GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4 | GPIO_PIN_0)== GPIO_PIN_4){
         //ui8Adjust--;
         ui8Adjust = ui8Adjust - 3;
-        if (ui8Adjust < 35){
-            ui8Adjust = 35;
+        if (ui8Adjust < 0){
+            ui8Adjust = 0;
         }
-        PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ui8Adjust * ui32Period / 1000);
+        SetServoAngle(ui8Adjust);
     }
 }
 
@@ -44,18 +88,14 @@ portF_int_handler(void)
 void
 pwm_init(void)
 {
-    // Reloj del sistema a 80MHz y reloj de PWM a 1.25MHz
-    SysCtlClockSet(SYSCTL_SYSDIV_2_5 |SYSCTL_USE_PLL |SYSCTL_OSC_MAIN |SYSCTL_XTAL_16MHZ);
-    SysCtlPWMClockSet(SYSCTL_PWMDIV_64);
+    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC |   SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
-    // Habilitación de periféricos de Puerto F, Puerto D y PWM1
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
+    GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_0);
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0x00);
+/*
+    // Habilitación de periféricos de Puerto F
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-
-    // Configurarción de PD_0 para la señal de PWM (modulo PWM 1, generador 0)
-    GPIOPinTypePWM(GPIO_PORTD_BASE, GPIO_PIN_0);
-    GPIOPinConfigure(GPIO_PD0_M1PWM0);
 
     // Desbloqueo de SW2
     HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
@@ -72,19 +112,30 @@ pwm_init(void)
     GPIOIntEnable(GPIO_PORTF_BASE, GPIO_INT_PIN_0 | GPIO_INT_PIN_4);
     // Interrupción maestra
     IntMasterEnable();
+*/
+    timerInit();
 
-    // Cálculo de periodo de Timer de PWM
-    uint32_t ui32PWMClock = SysCtlClockGet() / 64;
-    ui32Period = (ui32PWMClock / PWM_FREQUENCY) - 1;
-    // Configuración del PWM_1 Genereador_0 como Count Down Mode
-    PWMGenConfigure(PWM1_BASE, PWM_GEN_0, PWM_GEN_MODE_DOWN);
-    // Carga del periodo calculado al módulo
-    PWMGenPeriodSet(PWM1_BASE, PWM_GEN_0, ui32Period);
+    InitServo();
+    ConfigureServo();
 
-    // Cambio del Duty Cycle de PWM a valor específico (obtenido al presionar SW_1 o SW_2)
-    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, ui8Adjust * ui32Period / 1000);
-    // Habilitaación de del pin PWM_0 de módulo PWM 1 como salida
-    PWMOutputState(PWM1_BASE, PWM_OUT_0_BIT, true);
-    // Habilitación del Generador PWM
-    PWMGenEnable(PWM1_BASE, PWM_GEN_0);
+    SetServoAngle(90);
+
+    // Iniciliazacion de UART
+    //uart_init();
+}
+
+void
+angle_get(void)
+{
+    // Limpieza de puerto UART previo a comunicacion
+    UARTIntClear(UART0_BASE, UARTIntStatus(UART0_BASE, true));
+
+    if(UARTCharsAvail(UART0_BASE))
+    {
+        // Poner caracter en el puerto UART
+        UARTCharPut(UART0_BASE, UARTCharGet(UART0_BASE));
+        // Igualar valor a varaible
+        ui8Adjust = UARTCharGet(UART0_BASE);
+    }
+    SetServoAngle(ui8Adjust);
 }

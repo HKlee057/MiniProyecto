@@ -1,4 +1,4 @@
-#Laboratorio 4 - Electrónica Digital 2
+#MiniProyecto - Diseño e Innovación en Ingeniería
 #Hector A. Klée González
 #17118
 
@@ -11,7 +11,7 @@ import sys
 from tkinter import messagebox
 
 #Definición de variables
-volt_sens = OFF
+volt_sens = "OFF"
 real_sens = 0
 
 #Configuración del Puerto Serial

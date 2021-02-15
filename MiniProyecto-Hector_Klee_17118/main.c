@@ -34,14 +34,18 @@
 #include "Servo.h"                          // Libreria creada para control de servo en PWM1, Gen0
 #include "Sensor.h"                         // Libreria creada para control de sensor de interferencia/ seguidor de linea
 #include "UART.h"                           // Libreria creada para UART
+#include "delay_timer.h"
 /* -----------------------              Main            --------------------- */
 int main(void)
 {
+    uart_init();
     pwm_init();
     sens_init();
 
     while (1)
     {
         colors();
+        delay(100);
+        angle_get();
     }
 }

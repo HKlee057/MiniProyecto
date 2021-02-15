@@ -14,7 +14,8 @@ void
 uart_init(void)
 {
     /// Reloj del sistema a 80MHz
-    SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+    //SysCtlClockSet(SYSCTL_SYSDIV_2_5 | SYSCTL_USE_PLL | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC |   SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
     // Habilitación de periféricos de Puerto A y UART0
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
@@ -37,7 +38,7 @@ uart_init(void)
 
     // Configuracion de UART0 para entradas y salidas estandar
     UARTStdioConfig(0, UART0_BAUDRATE, SysCtlClockGet());
-    UARTprintf("Ingrese valores: \n");
+    UARTprintf("Ingrese ángulo: \n");
 }
 
 /* -------------------      Handler de Interrupción UART0     --------------------- */

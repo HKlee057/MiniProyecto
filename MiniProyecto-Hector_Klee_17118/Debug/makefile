@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./Sensor.obj" \
 "./Servo.obj" \
 "./UART.obj" \
+"./delay_timer.obj" \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./uartStdio/uartstdio.obj" \
@@ -162,8 +163,8 @@ MiniProyecto-Hector_Klee_17118.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Sensor.obj" "Servo.obj" "UART.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" "uartStdio\uartstdio.obj" 
-	-$(RM) "Sensor.d" "Servo.d" "UART.d" "main.d" "tm4c123gh6pm_startup_ccs.d" "uartStdio\uartstdio.d" 
+	-$(RM) "Sensor.obj" "Servo.obj" "UART.obj" "delay_timer.obj" "main.obj" "tm4c123gh6pm_startup_ccs.obj" "uartStdio\uartstdio.obj" 
+	-$(RM) "Sensor.d" "Servo.d" "UART.d" "delay_timer.d" "main.d" "tm4c123gh6pm_startup_ccs.d" "uartStdio\uartstdio.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

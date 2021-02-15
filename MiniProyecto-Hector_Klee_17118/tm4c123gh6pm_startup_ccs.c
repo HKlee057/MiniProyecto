@@ -43,7 +43,7 @@ static void IntDefaultHandler(void);
 extern void _c_int00(void);
 void portF_int_handler(void);
 void uart_int_handler(void);
-//void timer0_int_handler(void);
+extern void timer5_int_handler(void);
 
 //*****************************************************************************
 //
@@ -178,7 +178,7 @@ void (* const g_pfnVectors[])(void) =
     0,                                      // Reserved
     0,                                      // Reserved
     0,                                      // Reserved
-    IntDefaultHandler,                      // Timer 5 subtimer A
+    timer5_int_handler,                      // Timer 5 subtimer A
     IntDefaultHandler,                      // Timer 5 subtimer B
     IntDefaultHandler,                      // Wide Timer 0 subtimer A
     IntDefaultHandler,                      // Wide Timer 0 subtimer B

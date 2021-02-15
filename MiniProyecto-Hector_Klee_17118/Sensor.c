@@ -17,8 +17,8 @@ void
 sens_init(void)
 {
     // Reloj del sistema a 80MHz y reloj de PWM a 1.25MHz
-    SysCtlClockSet(SYSCTL_SYSDIV_2_5 |SYSCTL_USE_PLL |SYSCTL_OSC_MAIN |SYSCTL_XTAL_16MHZ);
-    SysCtlPWMClockSet(SYSCTL_PWMDIV_64);
+    //SysCtlClockSet(SYSCTL_SYSDIV_2_5 |SYSCTL_USE_PLL |SYSCTL_OSC_MAIN |SYSCTL_XTAL_16MHZ);
+    SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC |   SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
     // Habilitación de periféricos de Puerto E, Puerto F
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
@@ -30,7 +30,7 @@ sens_init(void)
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
     // Iniciliazacion de UART
-    uart_init();
+    //uart_init();
 }
 
 /* ----------------      Cambio de color en LED al haber deteccion     --------------------- */
