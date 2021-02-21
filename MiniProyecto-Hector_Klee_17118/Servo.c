@@ -58,32 +58,6 @@ void SetServoAngle(uint32_t angle)
     SetServoPosition(servo_lut[angle]);
 }
 
-void
-portF_int_handler(void)
-{
-    // ISR de Puerto F manejo de interrupciones
-    GPIOIntClear(GPIO_PORTF_BASE , GPIO_INT_PIN_4 | GPIO_INT_PIN_0);
-
-    // If SW1 se presiona, aumentar a la variable de control de Duty Cycle
-    if(GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4 | GPIO_PIN_0)== GPIO_PIN_0){
-        //ui8Adjust++;
-        ui8Adjust = ui8Adjust + 3;
-        if (ui8Adjust > 180){
-            ui8Adjust = 180;
-        }
-        SetServoAngle(ui8Adjust);
-    }
-    // If SW2 se presiona, disminuir a la variable de control de Duty Cycle
-    if(GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_4 | GPIO_PIN_0)== GPIO_PIN_4){
-        //ui8Adjust--;
-        ui8Adjust = ui8Adjust - 3;
-        if (ui8Adjust < 0){
-            ui8Adjust = 0;
-        }
-        SetServoAngle(ui8Adjust);
-    }
-}
-
 /* -------------------      Inicializacion de modulo PWM     --------------------- */
 void
 pwm_init(void)
@@ -93,37 +67,14 @@ pwm_init(void)
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_0);
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0x00);
-/*
-    // Habilitación de periféricos de Puerto F
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 
-    // Desbloqueo de SW2
-    HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
-    HWREG(GPIO_PORTF_BASE + GPIO_O_CR) |= GPIO_PIN_0;
-    HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = 0;
-
-    // PF_0 y PF_4 (SW1 y SW2) configurados como Input y Pulled-up
-    GPIODirModeSet(GPIO_PORTF_BASE, GPIO_PIN_4|GPIO_PIN_0, GPIO_DIR_MODE_IN);
-    GPIOPadConfigSet(GPIO_PORTF_BASE, GPIO_PIN_4 | GPIO_PIN_0, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
-
-    // Configuración y habilitación de the Interrupción para PF_0 y PF_4 (SW1 y SW2)
-    IntEnable(INT_GPIOF);
-    GPIOIntTypeSet(GPIO_PORTF_BASE, GPIO_PIN_4 | GPIO_PIN_0, GPIO_FALLING_EDGE);
-    GPIOIntEnable(GPIO_PORTF_BASE, GPIO_INT_PIN_0 | GPIO_INT_PIN_4);
-    // Interrupción maestra
-    IntMasterEnable();
-*/
     timerInit();
 
     InitServo();
     ConfigureServo();
 
     SetServoAngle(90);
-
-    // Iniciliazacion de UART
-    //uart_init();
 }
-
 void
 angle_get(void)
 {
@@ -135,7 +86,7 @@ angle_get(void)
         // Poner caracter en el puerto UART
         UARTCharPut(UART0_BASE, UARTCharGet(UART0_BASE));
         // Igualar valor a varaible
-        ui8Adjust = UARTCharGet(UART0_BASE);
+        uint8_t ui8Adjustare = UARTCharGet(UART0_BASE);
     }
-    SetServoAngle(ui8Adjust);
+    //SetServoAngle(ui8Adjust);
 }

@@ -4,7 +4,7 @@
 
 
 from tkinter import *
-# import serial
+import serial
 import time
 import sys
 
@@ -15,11 +15,11 @@ volt_sens = "OFF"
 real_sens = 0
 
 #Configuración del Puerto Serial
-#puerto = 'COM8'
-#ser = serial.Serial(port = puerto, baudrate = 9600,
-                    #parity = serial.PARITY_NONE,
-                    #stopbits = serial.STOPBITS_ONE,
-                    #bytesize = serial. EIGHTBITS, timeout = 0)
+puerto = 'COM8'
+ser = serial.Serial(port = puerto, baudrate = 115200,
+                    parity = serial.PARITY_NONE,
+                    stopbits = serial.STOPBITS_ONE,
+                    bytesize = serial. EIGHTBITS, timeout = 0)
 
 
 #Configuración de la ventana
@@ -36,18 +36,18 @@ sens1 = Label(ventana, text="Valor de Sensor", background = 'gold3', font=('Bols
 
 
 #Configuración del botón
-#def sendCount():
-#    ser.flushInput()
-#    ser.flushOutput()
-#    time.sleep(.05)
-#    answer_write = answer.get()
-#    answer_send = chr(int(answer_write))
-#    ser.write(answer_send) 
+def sendCount():
+    ser.flushInput()
+    ser.flushOutput()
+    time.sleep(.05)
+    answer_write = answer.get()
+    answer_send = chr(int(answer_write))
+    ser.write(answer_send) 
 
-def helloCallBack():
-   messagebox.showinfo( "Hello Python", "Hello World")
+#def helloCallBack():
+#   messagebox.showinfo( "Hello Python", "Hello World")
    
-send = Button(ventana, text = "Enviar", command=helloCallBack)
+send = Button(ventana, text = "Enviar", command=sendCount)
 send.place(x=340,y=130)
 
 #Configración de casillas de información

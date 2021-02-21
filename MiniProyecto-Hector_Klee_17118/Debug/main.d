@@ -38,6 +38,8 @@ main.obj: ../delay_timer.h
 main.obj: ../Sensor.h
 main.obj: ../UART.h
 main.obj: ../uartStdio/uartstdio.h
+main.obj: C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdio.h
+main.obj: C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdlib.h
 
 ../main.c: 
 C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdint.h: 
@@ -77,3 +79,5 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/uart.h:
 ../Sensor.h: 
 ../UART.h: 
 ../uartStdio/uartstdio.h: 
+C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdio.h: 
+C:/ti/ccs1000/ccs/tools/compiler/ti-cgt-arm_20.2.0.LTS/include/stdlib.h: 

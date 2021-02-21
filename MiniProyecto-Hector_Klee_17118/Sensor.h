@@ -30,7 +30,7 @@
 void
 sens_init(void);                       // Iniciliazacion de pin de sensor
 
-void
+int
 colors(void);                          // Funcion de cambio de color a haber deteccion
 
 #endif /* SENSOR_H_ */

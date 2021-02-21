@@ -7,11 +7,12 @@
 
 #include "Sensor.h"                         // Libreria creada para control de sensor de interferencia/ seguidor de linea
 #include "UART.h"                           // Libreria creada para UART
+
 /* ------------------------------     Variables        ---------------------------- */
 uint8_t sens_data = 1;                      // Variable de control de sensor
 uint8_t action;                             // Varaible de verificación de detección
 uint8_t count;                              // Variable contadora de caso
-
+uint8_t sensor_state = 0;
 /* -------------------      Inicializacion de pines de Sensor     --------------------- */
 void
 sens_init(void)
@@ -34,7 +35,7 @@ sens_init(void)
 }
 
 /* ----------------      Cambio de color en LED al haber deteccion     --------------------- */
-void
+int
 colors(void)
 {
     sens_data = GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_1);
@@ -48,12 +49,14 @@ colors(void)
             count++;
             if (count == 1)
             {
-                // Azul
+                // Turquesa
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0x00);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, GPIO_PIN_3);
 
-                UARTprintf("Interferencia detectada: ON \n");
+                // UARTprintf("Interferencia detectada: ON \n");
+
+                sensor_state = 1;
 
             }  else if (count == 2)
             {
@@ -61,9 +64,14 @@ colors(void)
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, 0x00);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0x00);
                 GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3, 0x00);
-                UARTprintf("Sin interferencia: OFF \n");
+
+                // UARTprintf("Sin interferencia: OFF \n");
+
+                sensor_state = 0;
+
                 count = 0;
             }
             action = 0;
         }
+    return sensor_state;
 }

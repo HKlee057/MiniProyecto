@@ -100,23 +100,23 @@ int main(void)
 
     SetServoAngle(0);
 
-    delay(1000);
+    delay(100);
 
     while(true){
         SetServoAngle(45);
-        delay(1000);
+        delay(100);
 
         SetServoAngle(90);
-        delay(1000);
+        delay(100);
 
         SetServoAngle(135);
-        delay(1000);
+        delay(100);
 
         SetServoAngle(180);
-        delay(1000);
+        delay(100);
 
         SetServoAngle(0);
-        delay(1000);
+        delay(100);
     }
 
 }

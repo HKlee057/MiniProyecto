@@ -46,9 +46,6 @@ void
 SetServoAngle(uint32_t angle);
 
 void
-portF_int_handler(void);                 // Prototipo ISR de GPIO PortF
-
-void
 pwm_init(void);                       // Iniciliazacion de modulo PWM
 
 void
